@@ -26,10 +26,11 @@ namespace Wolfman.UrlShortener
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSingleton<RedisService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RedisService redisService)
         {
             if (env.IsDevelopment())
             {
@@ -41,6 +42,7 @@ namespace Wolfman.UrlShortener
                 app.UseHsts();
             }
 
+            redisService.Connect();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
