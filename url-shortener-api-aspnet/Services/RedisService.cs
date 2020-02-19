@@ -53,5 +53,10 @@ namespace Wolfman.UrlShortener {
             IDatabase db = redis.GetDatabase();
             await db.StringSetAsync(key, value);
         }
+
+        public int GetDbSize() {
+            IDatabase db = redis.GetDatabase();
+            return (int)db.Execute("DBSIZE");
+        }
     }
 }

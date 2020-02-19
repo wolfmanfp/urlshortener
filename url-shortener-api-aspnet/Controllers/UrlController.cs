@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace Wolfman.UrlShortener
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class UrlController : ControllerBase
@@ -23,6 +22,9 @@ namespace Wolfman.UrlShortener
         [HttpGet("{hash}")]
         public async Task<ActionResult<string>> GetUrl(string hash) {
             string url = await redisService.Get(hash);
+            if (url == null) {
+                return NotFound();
+            }
             return Ok(new {url = url});
         }
 
@@ -31,9 +33,14 @@ namespace Wolfman.UrlShortener
             Base62Converter base62 = new Base62Converter();
             Random random = new Random();
 
-            string hash = base62.Encode(random.Next(10000, 99999).ToString());
+            string hash = base62.Encode(GetOrdinal());
             await redisService.Set(hash, req.Url);
             return CreatedAtAction(nameof(GetUrl), new {hash = hash}, new {hash = hash});
+        }
+
+        private string GetOrdinal() {
+            int ordinal = 10000 + redisService.GetDbSize();
+            return ordinal.ToString();
         }
     }
 }
