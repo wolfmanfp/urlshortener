@@ -1,6 +1,7 @@
 using Base62;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Wolfman.UrlShortener
@@ -11,36 +12,55 @@ namespace Wolfman.UrlShortener
     {
         private readonly RedisService redisService;
 
-        public class PostRequest {
+        public class PostRequest
+        {
             public string Url { get; set; }
         }
 
-        public UrlController(RedisService svc) {
+        public UrlController(RedisService svc)
+        {
             redisService = svc;
         }
 
         [HttpGet("{hash}")]
-        public async Task<ActionResult<string>> GetUrl(string hash) {
+        public async Task<ActionResult<string>> GetUrl(string hash)
+        {
             string url = await redisService.Get(hash);
-            if (url == null) {
+            if (url == null)
+            {
                 return NotFound();
             }
-            return Ok(new {url = url});
+            return Ok(new { url = url });
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> PostUrl([FromBody] PostRequest req) {
-            Base62Converter base62 = new Base62Converter();
-            Random random = new Random();
-
-            string hash = base62.Encode(GetOrdinal());
+        public async Task<ActionResult<string>> PostUrl([FromBody] PostRequest req)
+        {
+            string hash = GetHash(req.Url);
             await redisService.Set(hash, req.Url);
-            return CreatedAtAction(nameof(GetUrl), new {hash = hash}, new {hash = hash});
+            return CreatedAtAction(nameof(GetUrl), new { hash = hash }, new { hash = hash });
         }
 
-        private string GetOrdinal() {
-            int ordinal = 10000 + redisService.GetDbSize();
-            return ordinal.ToString();
+        private string GetHash(string url) {
+            Base62Converter base62 = new Base62Converter();
+            string hash = base62.Encode(GetMd5Hash(url));
+            return hash.Substring(0, 6);
+        }
+
+        private string GetMd5Hash(string url)
+        {
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.ASCII.GetBytes(url);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
         }
     }
 }
