@@ -6,7 +6,6 @@ import hu.wolfman.urlshortener.model.PostUrlRequest;
 import hu.wolfman.urlshortener.model.PostUrlResponse;
 import hu.wolfman.urlshortener.service.RedisService;
 import io.seruco.encoding.base62.Base62;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -14,6 +13,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -53,6 +54,13 @@ public class UrlResource {
     }
 
     private byte[] getMd5Hash(String url) {
-        return DigestUtils.md5Hex(url).toLowerCase().getBytes();
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(url.getBytes());
+            return md.digest();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
