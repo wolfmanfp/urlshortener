@@ -1,0 +1,14 @@
+{
+  "name": "express-rest-teszt",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "base-62.js": "~0.9.9",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "redis": "~3.0.2"
+  }
+}
