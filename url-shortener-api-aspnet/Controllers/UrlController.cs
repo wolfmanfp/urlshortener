@@ -17,9 +17,9 @@ namespace Wolfman.UrlShortener
             public string Url { get; set; }
         }
 
-        public UrlController(RedisService svc)
+        public UrlController(RedisService redisService)
         {
-            redisService = svc;
+            this.redisService = redisService;
         }
 
         [HttpGet("{hash}")]
@@ -30,7 +30,7 @@ namespace Wolfman.UrlShortener
             {
                 return NotFound();
             }
-            return Ok(new { url = url });
+            return Ok(new { url });
         }
 
         [HttpPost]
@@ -38,29 +38,27 @@ namespace Wolfman.UrlShortener
         {
             string hash = GetHash(req.Url);
             await redisService.Set(hash, req.Url);
-            return CreatedAtAction(nameof(GetUrl), new { hash = hash }, new { hash = hash });
+            return CreatedAtAction(nameof(GetUrl), new { hash }, new { hash });
         }
 
-        private string GetHash(string url) {
-            Base62Converter base62 = new Base62Converter();
-            string hash = base62.Encode(GetMd5Hash(url));
-            return hash.Substring(0, 6);
-        }
-
-        private string GetMd5Hash(string url)
+        private static string GetHash(string url) 
         {
-            using (MD5 md5 = MD5.Create())
-            {
-                byte[] inputBytes = Encoding.ASCII.GetBytes(url);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
+            Base62Converter base62 = new();
+            string hash = base62.Encode(GetMd5Hash(url));
+            return hash[..6];
+        }
 
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("X2"));
-                }
-                return sb.ToString();
+        private static string GetMd5Hash(string url)
+        {
+            byte[] inputBytes = Encoding.ASCII.GetBytes(url);
+            byte[] hashBytes = MD5.HashData(inputBytes);
+
+            StringBuilder sb = new();
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                sb.Append(hashBytes[i].ToString("X2"));
             }
+            return sb.ToString();
         }
     }
 }
