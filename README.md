@@ -3,7 +3,7 @@
 Trying out different frameworks by writing an URL shortener.
 
 - [x] API - ASP.NET Core 3 --> ASP.NET 7
-- [x] API - Jakarta EE 8.0 --> Jakarta EE 10
+- [x] API - Jakarta EE 10
 - [x] API - Node.js (Express.js)
 - [ ] API - Python (Django)
 - [ ] API - Rust (Rocket)

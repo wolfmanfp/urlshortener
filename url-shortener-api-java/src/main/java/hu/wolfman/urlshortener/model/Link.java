@@ -1,7 +1,7 @@
 package hu.wolfman.urlshortener.model;
 
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
 
 @Entity
 public class Link {
