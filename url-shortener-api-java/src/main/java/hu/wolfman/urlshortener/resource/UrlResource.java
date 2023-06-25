@@ -6,18 +6,18 @@ import hu.wolfman.urlshortener.model.PostUrlRequest;
 import hu.wolfman.urlshortener.model.PostUrlResponse;
 import hu.wolfman.urlshortener.service.RedisService;
 import io.seruco.encoding.base62.Base62;
+import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/url")
 @Consumes(APPLICATION_JSON)
@@ -39,7 +39,7 @@ public class UrlResource {
 
     @POST
     public Response postUrl(PostUrlRequest request) {
-        String url = request.getUrl();
+        String url = request.url();
         String hash = getHash(url);
         redisService.set(hash, url);
 

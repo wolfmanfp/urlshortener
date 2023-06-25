@@ -1,11 +1,12 @@
-# URL shortener
+# URL Shortener
 
 Trying out different frameworks by writing an URL shortener.
 
-- [x] API - ASP.NET Core 3.0
-- [x] API - Jakarta EE 8.0
-- [x] API - Node.js
-- [ ] API - Python
+- [x] API - ASP.NET 7
+- [x] API - Jakarta EE 10
+- [x] API - Node.js (Express.js)
+- [ ] API - Python (Django)
+- [ ] API - Rust (Rocket)
 - [ ] Frontend - React
 - [ ] Frontend - Angular
 - [ ] Frontend - Vue.js

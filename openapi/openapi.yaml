@@ -1,0 +1,57 @@
+openapi: 3.1.0
+info:
+  title: URL Shortener
+  version: 1.0.0
+
+servers: 
+  - url: http://localhost:3000/api
+    description: Localhost - Node.js
+  - url: http://localhost:5000/api
+    description: Localhost - ASP.NET
+  - url: http://localhost:8080/api
+    description: Localhost - Jakarta EE
+
+paths:
+  /url:
+    post:
+      requestBody: 
+        required: true
+        content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hash:
+                    type: string
+  /url/{hash}:
+    get:
+      parameters:
+        - name: hash
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+        404:
+          description: Not Found
+          content: {}
+

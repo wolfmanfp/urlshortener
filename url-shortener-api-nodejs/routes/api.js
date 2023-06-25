@@ -6,25 +6,23 @@ const base62 = require('base-62.js');
 const router = express.Router();
 const client = redis.createClient({
     host: '127.0.0.1',
-    port: '32768',
+    port: '6379',
+    password: 'redis',
     db: 0
 });
 
-router.get('/url/:hash', function (req, res) {
-    client.get(req.params.hash, function (error, result) {
-        if (error || result == null) {
-            req.status(404).end();
-        }
+client.on('error', err => console.error(err));
+client.connect();
 
-        let url = result;
-        res.status(200).json({url: url}).end();
-    });
+router.get('/url/:hash', async function (req, res) {
+    let url = await client.get(req.params.hash);
+    res.status(200).json({url: url}).end();
 });
 
-router.post('/url', function (req, res) {
+router.post('/url', async function (req, res) {
     let url = req.body.url;
     let hash = createHash(url);
-    client.set(hash, url);
+    await client.set(hash, url);
 
     res.status(201).json({hash: hash}).end();
 });
