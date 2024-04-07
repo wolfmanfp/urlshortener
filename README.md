@@ -6,7 +6,7 @@ Trying out different frameworks by writing an URL shortener.
 - [x] API - Jakarta EE 10
 - [x] API - Node.js (Express.js)
 - [ ] API - Python (Django)
-- [ ] API - Rust (Rocket)
+- [x] API - Rust (Rocket)
 - [ ] Frontend - React
 - [ ] Frontend - Angular
 - [ ] Frontend - Vue.js
