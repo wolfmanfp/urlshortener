@@ -8,7 +8,7 @@ Trying out different frameworks by writing an URL shortener.
 - [ ] API - Node.js (NestJS) (?)
 - [ ] API - Kotlin (Ktor)
 - [ ] API - Python (Django)
-- [ ] API - Rust (Rocket)
+- [x] API - Rust (Rocket)
 - [ ] Frontend - React
 - [ ] Frontend - Angular
 - [ ] Frontend - Vue.js
