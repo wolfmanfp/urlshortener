@@ -1,0 +1,17 @@
+########################
+### Request: POST /url
+########################
+
+POST {{server}}/api/url
+Content-Type: application/json
+
+{
+  "url": "https://wolfman.hu"
+}
+
+##############################
+### Request: GET /url/{hash}
+##############################
+
+GET {{server}}/api/url/{{hash}}
+Content-Type: application/json
