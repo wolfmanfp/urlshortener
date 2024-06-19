@@ -21,7 +21,6 @@ if (!app.Environment.IsDevelopment())
 RedisService redisService = app.Services.GetRequiredService<RedisService>();
 redisService.Connect();
 
-app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
