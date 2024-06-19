@@ -1,14 +1,14 @@
-version: '3.8'
+name: url-shortener
 
 services:
-  redis:
-    image: redis:7.0.11-alpine
-    command: redis-server /etc/redis/redis.conf
+  valkey:
+    image: valkey/valkey:7.2.5-alpine3.19
+    command: valkey-server /etc/valkey/valkey.conf
     volumes: 
-      - ./redis.conf:/etc/redis/redis.conf
+      - ./valkey.conf:/etc/valkey/valkey.conf
     ports:
       - '6379:6379'
 
 volumes:
-  redis:
+  valkey:
     driver: local
